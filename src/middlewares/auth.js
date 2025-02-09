@@ -6,6 +6,9 @@ const userAuth = async (req, res, next) => {
     try{ 
     
     const {token} = req.cookies;
+    if (!token) {
+        return res.status(401).send("Please Login!");
+      }
 
     const decodedObj = await jwt.verify(token , "secretkey");
 
@@ -15,11 +18,12 @@ const userAuth = async (req, res, next) => {
 
     if(!user){
         throw new Error("User not found");
-    }
+    } else {
     next();
+    }
     
 } catch(err){
-    res.status(401).send("Unauthorized access");
+    res.status(401).send("Unauthorized access " + err);
     }
 };
 
